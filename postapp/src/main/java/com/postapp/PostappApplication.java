@@ -1,12 +1,15 @@
 package com.postapp;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.postapp.models.responses.UserRest;
 import com.postapp.security.AppProperties;
+import com.postapp.shared.dto.UserDto;
 
 
 
@@ -31,5 +34,15 @@ public class PostappApplication {
 	@Bean(name = "AppProperties")
 	public AppProperties appProperties() {
 		return new AppProperties();
+	}
+	
+	@Bean
+	public ModelMapper modelMapper () {
+		
+		ModelMapper mapper = new ModelMapper();
+		
+		//Para que no haya recursividad
+		mapper.typeMap(UserDto.class, UserRest.class).addMappings(m -> m.skip(UserRest::setPosts));
+		return mapper;
 	}
 }

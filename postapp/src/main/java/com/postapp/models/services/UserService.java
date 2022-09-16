@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.postapp.exceptions.EmailExistException;
+import com.postapp.models.dao.IPostDAO;
 import com.postapp.models.dao.IUserDAO;
+import com.postapp.models.entities.Post;
 import com.postapp.models.entities.User;
+import com.postapp.shared.dto.PostDto;
 
 @Service //beanName = userService
 public class UserService implements IUserService {
@@ -21,6 +26,10 @@ public class UserService implements IUserService {
 	private IUserDAO userDAO;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private IPostDAO postDAO;
+	@Autowired
+	private ModelMapper mapper;
 
 	@Override
 	public List<User> findAll() {
@@ -57,6 +66,21 @@ public class UserService implements IUserService {
 			throw new UsernameNotFoundException(email);
 		}
 		return user;
+	}
+
+	@Override
+	public List<PostDto> getUserPosts(String email) {
+	
+		User user = this.userDAO.findByEmail(email);
+		
+		List<Post> posts = this.postDAO.getByUserIdOrderByCreatedAtDesc(user.getId());
+		
+		List<PostDto> postDtos = new ArrayList<>();
+		
+		for(Post post : posts) {
+			postDtos.add(this.mapper.map(post, PostDto.class));
+		}
+		return postDtos;
 	}
 
 }

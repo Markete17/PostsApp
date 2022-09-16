@@ -25,7 +25,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     	http.cors().and().csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/user").permitAll()
-        .antMatchers(HttpMethod.GET, "/posts/last").permitAll().antMatchers(HttpMethod.GET, "/posts/{id}")
+        .antMatchers(HttpMethod.GET, "/post/last").permitAll().antMatchers(HttpMethod.GET, "/post/{id}")
         .permitAll().anyRequest().authenticated().and().addFilter(getAuthenticationFilter())
         .addFilter(getAuthorizationFilter()).sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
