@@ -14,6 +14,8 @@ import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "users", indexes = { @Index(columnList = "userId", name = "index_userid", unique = true),
 		@Index(columnList = "email", name = "index_email", unique = true) })
@@ -42,6 +44,7 @@ public class User implements Serializable {
 	private String password;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@JsonIgnoreProperties("user")
 	private List<Post> posts = new ArrayList<>();
 
 	public Long getId() {

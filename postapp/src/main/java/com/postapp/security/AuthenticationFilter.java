@@ -56,6 +56,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		String token = 
 				Jwts.builder().setSubject(email).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_DATE))
 				.signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret()).compact();
+		//El token tendra el email y la fecha de expiracion
 		
 		// Para añadir el userId, como esta clase no es un Bean, se necesita crear la clase
 		// SpringApplicationContext para obtener el Bean que queramos, en este caso, 
@@ -64,6 +65,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		User user = userService.getUser(email);
 		
 		if (user!=null) {
+			response.addHeader("Access-Control-Expose-Headers", "Authorization");
+			response.addHeader("Access-Control-Expose-Headers", "UserId");
 			response.addHeader("UserId", user.getUserId());
 		}
 		response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX+token);
