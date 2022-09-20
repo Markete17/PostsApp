@@ -23,7 +23,7 @@ const SignUpForm = ({errors, onSubmitCallback}) => {
                 <Form.Control
                     type="text"
                     value={firstName}
-                    onChange={ e=> setFirstName(e.target.value) }
+                    onChange={ e=> {setFirstName(e.target.value);errors.firstName=null }}
                     placeholder='First Name'
                     isInvalid={errors.firstName}
                 />
@@ -38,7 +38,7 @@ const SignUpForm = ({errors, onSubmitCallback}) => {
                 <Form.Control
                     type="text"
                     value={lastName}
-                    onChange={ e=> setLastName(e.target.value) }
+                    onChange={ e=> {setLastName(e.target.value);errors.lastName=null}}
                     placeholder='First Name'
                     isInvalid={errors.lastName}
                 />
@@ -55,7 +55,7 @@ const SignUpForm = ({errors, onSubmitCallback}) => {
             <Form.Control
                 type="email"
                 value={email}
-                onChange={ e=> setEmail(e.target.value) }
+                onChange={ e=> {setEmail(e.target.value);errors.email=null }}
                 placeholder='Email'
                 isInvalid={errors.email}
             />
@@ -68,7 +68,7 @@ const SignUpForm = ({errors, onSubmitCallback}) => {
             <Form.Control
                 type="password"
                 value={password}
-                onChange={ e=> setPassword(e.target.value) }
+                onChange={ e=> {setPassword(e.target.value);errors.password=null }}
                 placeholder='Password'
                 isInvalid={errors.password}
             />

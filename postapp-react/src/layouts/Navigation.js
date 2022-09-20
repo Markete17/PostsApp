@@ -25,7 +25,7 @@ const Navigation = () => {
         <Navbar.Toggle aria-controls='main-menu'></Navbar.Toggle>
         <Navbar.Collapse id='main-menu'>
             <Nav className="me-auto">
-                {loggedIn && <Nav.Link className='me-3'>Create Post</Nav.Link>}
+                {loggedIn && <Nav.Link as={NavLink} to={'/newpost'} className='me-3'>Create Post</Nav.Link>}
             </Nav>
             <Nav>
                 { 
@@ -37,7 +37,7 @@ const Navigation = () => {
                 </React.Fragment>
                 :
                 <NavDropdown className='col-md-4 me-4' title={user.userDetails.firstName} id="menu-dropdown">
-                    <NavDropdown.Item className='col-md-4 me-4' as={NavLink} to={'/posts'}>Posts</NavDropdown.Item>
+                    <NavDropdown.Item className='col-md-4 me-4' as={NavLink} to={'/posts'}>My Posts</NavDropdown.Item>
                     <NavDropdown.Item onClick={logout} className='col-md-4 me-4'>Log Out</NavDropdown.Item>
                 </NavDropdown>
             }
