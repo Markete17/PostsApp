@@ -6,3 +6,5 @@ export const POSTS_ENDPOINT = API_URL + 'post/last';
 export const POSTS_DETAILS_ENDPOINT = API_URL + 'post';
 export const USER_POSTS_ENDPOINT = API_URL + 'user/posts';
 export const CREATE_POST_ENDPOINT = API_URL + 'post';
+export const DELETE_POST_ENDPOINT = API_URL + 'post';
+export const UPDATE_POST_ENDPOINT = API_URL + 'post';

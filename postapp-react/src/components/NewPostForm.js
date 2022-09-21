@@ -1,13 +1,27 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Form, Button, Row, Col} from 'react-bootstrap'
 import { exposures } from '../helpers/exposures';
+import moment from 'moment';
 
-const NewPostForm = ({errors, onSubmitCallback}) => {
 
-    const [title,setTitle] = useState("");
-    const [content,setContent] = useState("");
-    const [expirationTime,setExpirationTime] = useState(60);
-    const [exposureId,setExposureId] = useState(exposures.PUBLIC);
+const NewPostForm = ({errors, onSubmitCallback,pTitle="",pContent="",pExposureId=exposures.PUBLIC,pExpirationTime=60, textButton= "Create"}) => {
+    
+    
+
+    const [title,setTitle] = useState(pTitle);
+    const [content,setContent] = useState(pContent);
+    const [expirationTime,setExpirationTime] = useState(pExpirationTime);
+    const [exposureId,setExposureId] = useState(pExposureId);
+
+    useEffect(() =>{
+        const formatDate = () => {
+            if(pExpirationTime!==60){
+                const min = - (moment().diff(pExpirationTime, 'minutes') -1)
+                setExpirationTime(min)
+            }
+        }
+        formatDate()
+      }, [pExpirationTime])
     
 
     const submitForm = (e) => {
@@ -39,7 +53,7 @@ const NewPostForm = ({errors, onSubmitCallback}) => {
                     as='select' 
                     value={expirationTime} 
                     onChange={ e => setExpirationTime(e.target.value)}
-                    disabled={exposureId == exposures.PRIVATE}
+                    disabled={parseInt(exposureId) === exposures.PRIVATE}
                     >
                     <option value="30">30 minutes</option>
                     <option value="60">1 hour</option>
@@ -60,7 +74,7 @@ const NewPostForm = ({errors, onSubmitCallback}) => {
                 <div className='text-center'>
                     <Form.Check 
                         onChange={e => setExposureId(e.target.value)}
-                        checked={exposureId == exposures.PRIVATE}
+                        checked={parseInt(exposureId) === exposures.PRIVATE}
                         value={exposures.PRIVATE} 
                         inline 
                         label='Private' 
@@ -72,7 +86,7 @@ const NewPostForm = ({errors, onSubmitCallback}) => {
 
                     <Form.Check 
                         onChange={e => setExposureId(e.target.value)}
-                        checked={exposureId == exposures.PUBLIC}
+                        checked={parseInt(exposureId) === exposures.PUBLIC}
                         value={exposures.PUBLIC} 
                         inline 
                         label='Public' 
@@ -101,7 +115,7 @@ const NewPostForm = ({errors, onSubmitCallback}) => {
         </Form.Group>
 
         <div className="col-md-12 text-center">
-        <Button className="mt-4 mx-auto" variant='primary' type='submit'>Create</Button>
+        <Button className="mt-4 mx-auto" variant='primary' type='submit'>{textButton}</Button>
         </div>
     </Form>
   )

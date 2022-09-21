@@ -1,25 +1,36 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import { Container, Row, Col, Card,Alert } from 'react-bootstrap'
 import validator from 'validator'
 import { isObjectEmpty } from '../helpers/helpers'
 import NewPostForm from '../components/NewPostForm'
 import { exposures } from '../helpers/exposures'
 import axios from 'axios'
-import { CREATE_POST_ENDPOINT } from '../helpers/endpoints'
-import { useNavigate } from 'react-router-dom'
+import { UPDATE_POST_ENDPOINT } from '../helpers/endpoints'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import { getUserPosts } from '../actions/postActions'
 import { useDispatch } from 'react-redux'
+import { POSTS_DETAILS_ENDPOINT } from '../helpers/endpoints'
 
-const NewPost = () => {
+const EditPost = () => {
 
+  const {id} = useParams();
   const [errors,setErrors] = useState({});
-
   const navigate = useNavigate()
-  
   const dispatch = useDispatch()
+  const [post,setPost] = useState(null)
 
-  const createPost = async(title,content,expirationTime,exposureId) => {
+  useEffect(() =>{
+    axios.get(`${POSTS_DETAILS_ENDPOINT}/${id}`).then(
+      response => {
+        setPost(response.data)
+      }
+    ).catch(error =>{
+        navigate.push('/')
+    })
+  }, [id,navigate])
+
+  const editPost = async(title,content,expirationTime,exposureId) => {
     const errors = {}
 
     if(validator.isEmpty(title)){
@@ -35,32 +46,18 @@ const NewPost = () => {
     }
     expirationTime = parseInt(exposureId) === exposures.PRIVATE ? 0 : expirationTime
 
-    // MEJOR CON REACT REDUX ABAJO
-
-    // axios.post(CREATE_POST_ENDPOINT,{title,content,expirationTime,exposureId})
-    // .then(response =>{
-    //     navigate(`/post/${response.data.postId}`)
-    //     toast.info("Post created!",
-    //                             {
-    //                             position: toast.POSITION.TOP_RIGHT,
-    //                             autoClose:2000
-    //                             })
-    // }).catch(e => {
-    //     setErrors({newpost: e.response.data.message})
-    // })
-
     try {
-      const response = await axios.post(CREATE_POST_ENDPOINT,{title,content,expirationTime,exposureId})
+      const response = await axios.put(`${UPDATE_POST_ENDPOINT}/${post.postId}`,{title,content,expirationTime,exposureId})
       await dispatch(getUserPosts())
       navigate(`/post/${response.data.postId}`)
-      toast.info("Post created!",
+      toast.info("Post updated!",
         {
         position: toast.POSITION.TOP_RIGHT,
         autoClose:2000
         }
       )
     } catch(e) {
-      setErrors({newpost: e.response.data.message})
+      setErrors({editpost: e.response.data.message})
     }
 
   }
@@ -71,9 +68,19 @@ const NewPost = () => {
         <Col sm="12" md={{span:10,offset:1}} lg={{span:10,offset:1}}>
           <Card className='d-flex justify-content-center' body>
             {errors.newpost && <Alert variant='danger'>{errors.newpost}</Alert>}
-              <h3 className='text-center'>Create Post</h3>
+              <h3 className='text-center'>Edit Post</h3>
               <hr></hr>
-              <NewPostForm errors={errors} onSubmitCallback={createPost}></NewPostForm>
+            {post && <NewPostForm 
+                errors={errors} 
+                onSubmitCallback={editPost}
+                pTitle={post.title}
+                pContent={post.content}
+                pExposureId={post.exposure.id}
+                pExpirationTime={post.expiresAt}
+                textButton="Edit"
+                >
+                    
+                </NewPostForm>}
           </Card>
         </Col>
       </Row>
@@ -82,4 +89,4 @@ const NewPost = () => {
   )
 }
 
-export default NewPost
+export default EditPost

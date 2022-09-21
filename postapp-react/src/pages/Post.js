@@ -1,8 +1,9 @@
 import React from 'react'
 import { Badge, Button, Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import moment from 'moment/moment'
 import { exposures } from '../helpers/exposures'
+import DeletePostButton from '../layouts/DeletePostButton'
 
 const Post = ({post, renderControls}) => {
   return (
@@ -24,8 +25,8 @@ const Post = ({post, renderControls}) => {
                 
             </div>
             <div>
-                <Button variant="warning mx-1" size="sm" m>Edit</Button>
-                <Button variant="danger" size="sm">Delete</Button>
+                <Button variant="warning mx-1" size="sm" as={NavLink} to={`/editpost/${post.postId}`}>Edit</Button>
+                <DeletePostButton postId={post.postId} title={post.title}></DeletePostButton>
             </div>
         </Card.Header>
     }

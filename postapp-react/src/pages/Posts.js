@@ -3,6 +3,7 @@ import { POSTS_ENDPOINT } from '../helpers/endpoints'
 import axios from 'axios'
 import Post from './Post'
 import Loading from '../utils/Loading'
+import NoPosts from '../utils/NoPosts'
 
 const Posts = () => {
 
@@ -28,13 +29,16 @@ const Posts = () => {
         <h1 className='mt-4 h-50 p-4 text-white bg-primary rounded-3 text-center'>
         Last public posts
         </h1>
-       {loading ?<Loading></Loading> :
+       {loading && <Loading></Loading>}
+       {!loading && posts.length===0 
+       ? <NoPosts text={"There are not available public posts"}></NoPosts>
+       :
        <div>
-          {posts.map(post => 
-            <Post key={post.postId} post={post}></Post>
-          )}
-        </div>}
-
+        {posts.map(post => 
+          <Post key={post.postId} post={post}></Post>
+        )}
+       </div>
+      }
     </div>
   )
 }

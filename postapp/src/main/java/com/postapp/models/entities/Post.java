@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity(name = "posts")
 @EntityListeners(AuditingEntityListener.class) // Para crear las fechas automaticas
 @Table(indexes = @Index(columnList = "postId", name = "index_postid", unique = true))
@@ -51,6 +53,7 @@ public class Post implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "exposure_id")
+	@JsonIgnoreProperties("posts")
 	private Exposure exposure;
 
 	public Long getId() {

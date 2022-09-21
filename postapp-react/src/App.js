@@ -18,6 +18,8 @@ import PostDetails from "./pages/PostDetails";
 import NewPost from "./pages/NewPost";
 //import 'moment/locale/es'
 //moment.locale('es') Para formatear las fechas en idiomas
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import EditPost from "./pages/EditPost";
 
 checkForToken();
 
@@ -41,6 +43,9 @@ function App() {
             </Route>
             <Route exact path="/newpost" element={<PrivateRoute/>}>
               <Route exact path='/newpost' element={<NewPost/>}/>
+            </Route>
+            <Route exact path="/editpost/:id" element={<PrivateRoute/>}>
+              <Route exact path='/editpost/:id' element={<EditPost/>}/>
             </Route>
         </Routes>
       </Container>

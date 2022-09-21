@@ -35,8 +35,9 @@ export const loginUser = (userData) => disptach => {
                 disptach(setCurrentUser({user:decoded, loggedIn:true}));
 
                 resolve(response)
-            }).catch(e =>
+            }).catch(e => {
                 console.log(e)
+            }
                 )
 
         }).catch(error =>{
