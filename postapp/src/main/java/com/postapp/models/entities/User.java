@@ -13,6 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Range;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -32,15 +37,21 @@ public class User implements Serializable {
 	private String userId;
 
 	@Column(nullable = false, length = 50)
+	@NotEmpty(message = "First name is mandatory")
 	private String firstName;
 
 	@Column(nullable = false, length = 50)
+	@NotEmpty(message = "Last name is mandatory")
 	private String lastName;
 
 	@Column(nullable = false, length = 255)
+	@NotEmpty(message = "Email is mandatory")
+	@Pattern(regexp = "^[\\w-+]+(\\.[\\w-]{1,62}){0,126}@[\\w-]{1,63}(\\.[\\w-]{1,62})+/[\\w-]+$",message = "invalid email format")
 	private String email;
 
 	@Column(nullable = false)
+	@NotEmpty(message = "Password is mandatory")
+	@Size(min = 8, max = 30, message = "Password must have between 8 and 30 characters")
 	private String password;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

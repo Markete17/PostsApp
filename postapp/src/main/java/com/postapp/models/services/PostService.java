@@ -17,6 +17,7 @@ import com.postapp.models.entities.Post;
 import com.postapp.models.entities.User;
 import com.postapp.shared.dto.PostCreationDto;
 import com.postapp.shared.dto.PostDto;
+import com.postapp.utils.Exposures;
 
 @Service
 public class PostService implements IPostService {
@@ -58,7 +59,7 @@ public class PostService implements IPostService {
 	@Override
 	public List<PostDto> getLastPosts() {
 		
-		List<Post> posts= this.postDAO.getLastPublicPosts(2, new Date(System.currentTimeMillis()));
+		List<Post> posts= this.postDAO.getLastPublicPosts(Exposures.PUBLIC, new Date(System.currentTimeMillis()));
 		
 		List<PostDto> postDtos = new ArrayList<>();
 		

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,7 @@ import com.postapp.models.services.IUserService;
 import com.postapp.models.services.UserService;
 import com.postapp.shared.dto.PostCreationDto;
 import com.postapp.shared.dto.PostDto;
+import com.postapp.utils.Exposures;
 
 @RestController
 @RequestMapping(path = "/post")
@@ -45,7 +48,7 @@ public class PostController {
 	private ModelMapper mapper;
 	
 	@PostMapping
-	public PostRest createPost(@RequestBody PostCreateRequestModel postCreateRequestModel) {
+	public PostRest createPost(@RequestBody @Valid PostCreateRequestModel postCreateRequestModel) {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getPrincipal().toString();
@@ -87,7 +90,7 @@ public class PostController {
 			postRest.setExpired(true);
 		}
 		
-		if(postRest.getExposure().getId() == 1 || postRest.getExpired()) {
+		if(postRest.getExposure().getId() == Exposures.PRIVATE || postRest.getExpired()) {
 			
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			
@@ -114,7 +117,7 @@ public class PostController {
 	}
 	
 	@PutMapping(path = "/{id}")
-	public PostRest updatePost(@RequestBody PostCreateRequestModel postCreateRequestModel, @PathVariable String id) {
+	public PostRest updatePost(@RequestBody @Valid PostCreateRequestModel postCreateRequestModel, @PathVariable String id) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		User user = this.userService.getUser(authentication.getPrincipal().toString());

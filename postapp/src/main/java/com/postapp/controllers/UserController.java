@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +53,7 @@ public class UserController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<?> createUser(@RequestBody User user) {
+	public ResponseEntity<?> createUser(@RequestBody @Valid User user) {
 		User u = this.userService.create(user);
 		if (u != null) {
 			return new ResponseEntity<User>(u, HttpStatus.CREATED);
